@@ -1,3 +1,4 @@
+HELLO
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -65,8 +66,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .done-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
 .done-box p { color: #555; line-height: 1.6; margin-bottom: 6px; font-size: 14px; }
 #send-status { font-size: 14px; margin: 16px 0; min-height: 20px; }
-.btn-dl { background: #572381; color: #fff; border: none; padding: 11px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
-.btn-dl:hover { background: #3d1860; }
 .summary { background: #f9f9f9; border-radius: 8px; padding: 16px; margin-top: 20px; text-align: left; max-height: 300px; overflow-y: auto; }
 .summary h4 { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; margin-bottom: 12px; }
 .sum-cat { margin-bottom: 10px; }
@@ -129,7 +128,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <h2>Merci</h2>
     <p>Merci encore pour votre participation. Vos retours sont extrêmement utiles pour déterminer comment organiser et améliorer notre menu.</p>
     <div id="send-status"></div>
-    <button class="btn-dl" id="btn-dl">⬇ Télécharger mes résultats</button>
     <div class="summary" id="summary"></div>
   </div>
 </div>
@@ -216,14 +214,6 @@ document.getElementById('btn-done').onclick = function() {
   sendData();
 };
 
-document.getElementById('btn-dl').onclick = function() {
-  var d = JSON.stringify(getResults(), null, 2);
-  var b = new Blob([d], {type:'application/json'});
-  var u = URL.createObjectURL(b);
-  var a = document.createElement('a');
-  a.href = u; a.download = 'cardsorting_'+Date.now()+'.json'; a.click();
-  URL.revokeObjectURL(u);
-};
 
 function render() { renderCards(); renderCats(); updateProgress(); }
 
