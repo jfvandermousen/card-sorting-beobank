@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -33,10 +33,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .panel-head h3 { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
 .panel-head .cnt { font-size: 26px; font-weight: 700; color: #1a1a1a; }
 .cards-list { overflow-y: auto; padding: 10px; flex: 1; }
-.card-chip { background: #fff; border: 1.5px solid #ddd; border-radius: 8px; padding: 9px 12px; margin-bottom: 7px; font-size: 12.5px; cursor: grab; user-select: none; line-height: 1.4; transition: border-color 0.15s; }
-.card-chip:hover { border-color: #572381; box-shadow: 0 2px 8px rgba(87,35,129,0.1); }
+.card-chip { background: #fff; border: 1px solid #d0d0d0; border-radius: 6px; padding: 12px 14px; margin-bottom: 8px; font-size: 13px; cursor: grab; user-select: none; line-height: 1.4; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.card-chip:hover { border-color: #572381; box-shadow: 0 2px 8px rgba(87,35,129,0.15); transform: translateY(-1px); }
 .card-chip.dragging { opacity: 0.3; }
-.chip-id { font-size: 10px; color: #bbb; font-weight: 600; margin-bottom: 2px; }
+
 .cats-area { flex: 1; padding: 18px; overflow-y: auto; background: #f5f5f5; }
 .cats-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .cats-top h3 { font-size: 14px; font-weight: 600; }
@@ -56,7 +56,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .cat-empty { color: #ccc; font-size: 11px; text-align: center; padding: 16px 8px; border: 1.5px dashed #e8e8e8; border-radius: 6px; }
 .placed-card { background: #f9f9f9; border: 1px solid #eee; border-radius: 6px; padding: 7px 10px; margin-bottom: 5px; font-size: 11.5px; line-height: 1.4; display: flex; align-items: flex-start; gap: 5px; cursor: grab; }
 .placed-card:hover { background: #f0edf7; border-color: #c4a8e0; }
-.placed-id { font-size: 9.5px; color: #bbb; font-weight: 600; white-space: nowrap; margin-top: 1px; }
+
 .placed-rm { margin-left: auto; color: #ccc; cursor: pointer; font-size: 13px; flex-shrink: 0; }
 .placed-rm:hover { color: #e2001a; }
 #screen-complete { display: none; min-height: 100vh; align-items: center; justify-content: center; background: #fff; }
@@ -84,16 +84,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div id="screen-intro">
   <div class="intro-box">
     <div class="intro-logo">be<span>O</span>bank</div>
-    <h1>Aide-nous à améliorer notre menu</h1>
-    <p>Nous travaillons sur l'amélioration de la navigation de l'espace connecté <strong>Beobank Online</strong>. Votre mission est simple : regrouper les fonctionnalités de la façon qui vous semble la plus logique.</p>
-    <ul>
-      <li>Il n'y a pas de bonne ou de mauvaise réponse</li>
-      <li>Des catégories vous sont proposées, mais vous pouvez en créer de nouvelles</li>
-      <li>Si une carte vous semble incompréhensible, laissez-la de côté</li>
-      <li>L'exercice dure environ 15 à 20 minutes</li>
-    </ul>
-    <div class="intro-note">Vos réponses sont anonymes et utilisées uniquement dans le cadre d'une étude UX interne.</div>
-    <button class="btn-start" id="btn-start">Commencer →</button>
+    <h1>Bonjour et merci de participer à cette étude</h1>
+    <p>Nous travaillons sur la refonte et l'amélioration du menu de l'espace connecté <strong>Beobank Online</strong>. <strong>L'objectif</strong> est simple : comprendre comment vous, en tant qu'utilisateur, organisez naturellement les fonctionnalités d'une banque en ligne.</p>
+    <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
+    <p style="font-weight:600;margin-bottom:10px">Consignes</p>
+    <p>Vous allez voir apparaître une série de cartes, chacune représentant une action ou une fonctionnalité disponible dans l'<strong>espace connecté Beobank Online</strong>. Votre mission est de les regrouper de la façon qui vous semble la plus logique.</p>
+    <p style="margin-top:12px"><strong>Les catégories proposées sont là pour vous guider, mais elles ne sont pas obligatoires.</strong> Si vous estimez qu'une carte n'entre dans aucune catégorie existante, je vous invite à librement créer votre propre catégorie et lui donner le nom qui vous semble le plus adapté.</p>
+    <p style="margin-top:12px">Les catégories sont affichées aléatoirement, vous pouvez les réordonner de la manière qui vous semble la plus logique.</p>
+    <p style="margin-top:12px">Il n'y a pas de bonne ou de mauvaise réponse. Vos réponses sont anonymes. L'exercice dure environ 15 à 30 minutes.</p>
+    <button class="btn-start" id="btn-start" style="margin-top:24px">Commencer →</button>
   </div>
 </div>
 
@@ -127,8 +126,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <div id="screen-complete">
   <div class="done-box">
     <div class="done-icon">✅</div>
-    <h2>Merci pour votre participation !</h2>
-    <p>Votre tri a bien été enregistré.</p>
+    <h2>Merci</h2>
+    <p>Merci encore pour votre participation. Vos retours sont extrêmement utiles pour déterminer comment organiser et améliorer notre menu.</p>
     <div id="send-status"></div>
     <button class="btn-dl" id="btn-dl">⬇ Télécharger mes résultats</button>
     <div class="summary" id="summary"></div>
@@ -176,7 +175,7 @@ var CARDS = [
   {id:'C35',label:"Contacter / Écrire à mon conseiller"}
 ];
 
-var PRESET = ["Mes comptes et cartes","Paiements & Opérations","Mes investissements","Mes assurances","Mon profil & sécurité"];
+var PRESET = ["Mes investissements","Paiements & Opérations","Mes comptes et cartes","Mon profil & sécurité"];
 var unsorted = [], cats = [], catId = 0, dragCard = null, dragFrom = null;
 
 function shuffle(a) {
@@ -238,7 +237,7 @@ function renderCards() {
     var el = document.createElement('div');
     el.className = 'card-chip';
     el.draggable = true;
-    el.innerHTML = '<div class="chip-id">'+card.id+'</div>'+esc(card.label);
+    el.innerHTML = esc(card.label);
     el.ondragstart = function() { dragCard=card; dragFrom='unsorted'; setTimeout(function(){el.classList.add('dragging');},0); };
     el.ondragend = function() { el.classList.remove('dragging'); };
     list.appendChild(el);
@@ -262,7 +261,7 @@ function renderCats() {
     if (!cat.cards.length) bh += '<div class="cat-empty">Glissez des cartes ici</div>';
     else cat.cards.forEach(function(c){
       bh += '<div class="placed-card" draggable="true" data-cid="'+c.id+'" data-cat="'+cat.id+'">'
-        +'<span class="placed-id">'+c.id+'</span><span>'+esc(c.label)+'</span>'
+        +'<span>'+esc(c.label)+'</span>'
         +'<span class="placed-rm" data-cid="'+c.id+'" data-cat="'+cat.id+'">↩</span></div>';
     });
     bh += '</div>';
