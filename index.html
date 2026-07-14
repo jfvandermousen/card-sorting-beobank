@@ -2,108 +2,97 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Card Sorting — Beobank Online</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #1a1a1a; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #1a1a1a; -webkit-user-select: none; user-select: none; }
 #screen-intro { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #fff; }
-.intro-box { max-width: 600px; width: 90%; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 48px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-.intro-logo { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 28px; }
+.intro-box { max-width: 600px; width: 90%; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+.intro-logo { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 24px; }
 .intro-logo span { color: #e2001a; }
-.intro-box h1 { font-size: 24px; font-weight: 700; margin-bottom: 16px; }
-.intro-box p { color: #555; line-height: 1.7; margin-bottom: 14px; font-size: 15px; }
-.intro-box ul { color: #555; line-height: 1.9; padding-left: 20px; margin-bottom: 20px; font-size: 15px; }
-.intro-note { background: #f5f0fa; border-left: 3px solid #572381; padding: 12px 16px; border-radius: 4px; font-size: 14px; color: #572381; margin-bottom: 28px; }
-.btn-start { background: #1a7f5e; color: #fff; border: none; padding: 14px 32px; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; }
-.btn-start:hover { background: #156b4f; }
+.intro-box h1 { font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+.intro-box p { color: #555; line-height: 1.7; margin-bottom: 12px; font-size: 14px; }
+.intro-note { background: #f5f0fa; border-left: 3px solid #572381; padding: 12px 16px; border-radius: 4px; font-size: 13px; color: #572381; margin: 16px 0; }
+.btn-start { background: #1a7f5e; color: #fff; border: none; padding: 14px 32px; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 16px; }
 #screen-sorting { display: none; flex-direction: column; min-height: 100vh; }
-.top-bar { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-.top-logo { font-size: 15px; font-weight: 700; }
+.top-bar { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0 16px; height: 52px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; }
+.top-logo { font-size: 14px; font-weight: 700; }
 .top-logo span { color: #e2001a; }
-.progress-wrap { text-align: center; }
-.progress-text { font-size: 12px; color: #888; }
-.progress-bar { width: 180px; height: 5px; background: #e0e0e0; border-radius: 3px; margin-top: 3px; }
-.progress-fill { height: 100%; background: #1a7f5e; border-radius: 3px; transition: width 0.3s; width: 0%; }
-.btn-done { background: #1a7f5e; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; opacity: 0.4; pointer-events: none; }
-.btn-done.ready { opacity: 1; pointer-events: all; }
+.prog-wrap { text-align: center; }
+.prog-text { font-size: 11px; color: #888; }
+.prog-bar { width: 140px; height: 4px; background: #e0e0e0; border-radius: 2px; margin-top: 3px; }
+.prog-fill { height: 100%; background: #1a7f5e; border-radius: 2px; width: 0%; transition: width 0.3s; }
+.btn-done { background: #1a7f5e; color: #fff; border: none; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; opacity: 0.4; pointer-events: none; }
+.btn-done.ready { opacity: 1; pointer-events: all; cursor: pointer; }
 .layout { display: flex; flex: 1; }
-.cards-panel { width: 260px; min-width: 260px; background: #fff; border-right: 1px solid #e0e0e0; display: flex; flex-direction: column; position: sticky; top: 56px; height: calc(100vh - 56px); }
-.panel-head { padding: 14px 18px; border-bottom: 1px solid #f0f0f0; }
-.panel-head h3 { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
-.panel-head .cnt { font-size: 26px; font-weight: 700; color: #1a1a1a; }
+.cards-panel { width: 240px; min-width: 240px; background: #fff; border-right: 1px solid #e0e0e0; display: flex; flex-direction: column; position: sticky; top: 52px; height: calc(100vh - 52px); }
+.panel-head { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; }
+.panel-head h3 { font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+.panel-head .cnt { font-size: 24px; font-weight: 700; }
 .cards-list { overflow-y: auto; padding: 10px; flex: 1; }
-.card-chip { background: #fff; border: 1px solid #d0d0d0; border-radius: 6px; padding: 12px 14px; margin-bottom: 8px; font-size: 13px; cursor: grab; user-select: none; line-height: 1.4; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-.card-chip:hover { border-color: #572381; box-shadow: 0 2px 8px rgba(87,35,129,0.15); transform: translateY(-1px); }
-.card-chip.dragging { opacity: 0.3; }
-
-.cats-area { flex: 1; padding: 18px; overflow-y: auto; background: #f5f5f5; }
-.cats-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.card-chip { background: #fff; border: 1px solid #d8d8d8; border-radius: 8px; padding: 11px 13px; margin-bottom: 8px; font-size: 13px; line-height: 1.4; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.06); touch-action: none; }
+.card-chip.is-dragging { opacity: 0.3; }
+.cats-area { flex: 1; padding: 16px; overflow-y: auto; background: #f5f5f5; }
+.cats-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .cats-top h3 { font-size: 14px; font-weight: 600; }
-.btn-addcat { background: #fff; border: 1.5px solid #572381; color: #572381; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
-.btn-addcat:hover { background: #f5f0fa; }
-.cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.btn-addcat { background: #fff; border: 1.5px solid #572381; color: #572381; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
 .cat-box { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
 .cat-box.custom { border-color: #572381; }
-.cat-box.over { border-color: #1a7f5e; box-shadow: 0 0 0 3px rgba(26,127,94,0.12); }
-.cat-top { padding: 10px 14px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #f5f5f5; }
+.cat-box.drop-over { border-color: #1a7f5e !important; box-shadow: 0 0 0 3px rgba(26,127,94,0.15); }
+.cat-box.cat-dragging { opacity: 0.4; }
+.cat-box.cat-drop-over { border-color: #572381 !important; box-shadow: -3px 0 0 #572381; }
+.cat-top { padding: 10px 12px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #f5f5f5; }
+.cat-handle { color: #bbb; font-size: 16px; cursor: grab; flex-shrink: 0; touch-action: none; line-height: 1; padding: 2px 4px; }
 .cat-label { font-size: 13px; font-weight: 600; flex: 1; }
 .cat-label-input { border: none; outline: none; font-size: 13px; font-weight: 600; color: #572381; width: 100%; background: transparent; }
 .cat-count { font-size: 11px; color: #bbb; }
-.cat-del { background: none; border: none; cursor: pointer; color: #ccc; font-size: 16px; line-height: 1; }
-.cat-del:hover { color: #e2001a; }
+.cat-del { background: none; border: none; cursor: pointer; color: #ccc; font-size: 18px; line-height: 1; }
 .cat-body { padding: 8px; min-height: 70px; }
-.cat-empty { color: #ccc; font-size: 11px; text-align: center; padding: 16px 8px; border: 1.5px dashed #e8e8e8; border-radius: 6px; }
-.placed-card { background: #f9f9f9; border: 1px solid #eee; border-radius: 6px; padding: 7px 10px; margin-bottom: 5px; font-size: 11.5px; line-height: 1.4; display: flex; align-items: flex-start; gap: 5px; cursor: grab; }
-.placed-card:hover { background: #f0edf7; border-color: #c4a8e0; }
-
-.placed-rm { margin-left: auto; color: #ccc; cursor: pointer; font-size: 13px; flex-shrink: 0; }
-.placed-rm:hover { color: #e2001a; }
-.cat-box.drag-reorder { opacity: 0.4; }
-.cat-box.reorder-over { border-color: #572381 !important; box-shadow: -3px 0 0 #572381; }
-.cat-box .drag-handle { cursor: grab; color: #ccc; font-size: 14px; margin-right: 4px; }
-.cat-box .drag-handle:hover { color: #888; }
+.cat-empty { color: #ccc; font-size: 11px; text-align: center; padding: 14px 8px; border: 1.5px dashed #eee; border-radius: 6px; }
+.placed-card { background: #f9f9f9; border: 1px solid #eee; border-radius: 6px; padding: 8px 10px; margin-bottom: 6px; font-size: 12px; line-height: 1.4; display: flex; align-items: flex-start; gap: 6px; cursor: grab; touch-action: none; }
+.placed-rm { margin-left: auto; color: #ccc; font-size: 14px; flex-shrink: 0; cursor: pointer; padding: 0 2px; }
+.placed-card.is-dragging { opacity: 0.3; }
+#drag-ghost { position: fixed; pointer-events: none; z-index: 9999; background: #fff; border: 1.5px solid #572381; border-radius: 8px; padding: 10px 14px; font-size: 13px; box-shadow: 0 8px 24px rgba(87,35,129,0.25); max-width: 220px; opacity: 0.95; display: none; transform: rotate(2deg); line-height: 1.4; }
 #screen-complete { display: none; min-height: 100vh; align-items: center; justify-content: center; background: #fff; }
-.done-box { max-width: 480px; width: 90%; text-align: center; padding: 48px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-.done-icon { font-size: 52px; margin-bottom: 18px; }
+.done-box { max-width: 440px; width: 90%; text-align: center; padding: 44px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+.done-icon { font-size: 52px; margin-bottom: 16px; }
 .done-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
-.done-box p { color: #555; line-height: 1.6; margin-bottom: 6px; font-size: 14px; }
-#send-status { font-size: 14px; margin: 16px 0; min-height: 20px; }
-.summary { background: #f9f9f9; border-radius: 8px; padding: 16px; margin-top: 20px; text-align: left; max-height: 300px; overflow-y: auto; }
-.summary h4 { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; margin-bottom: 12px; }
-.sum-cat { margin-bottom: 10px; }
-.sum-cat-name { font-size: 12px; font-weight: 600; color: #1a1a1a; }
-.sum-cat-cards { font-size: 11px; color: #777; line-height: 1.6; }
+.done-box p { color: #555; line-height: 1.6; font-size: 14px; }
+#send-status { font-size: 14px; margin: 20px 0; min-height: 22px; }
 @media (max-width: 640px) {
   .layout { flex-direction: column; }
-  .cards-panel { width: 100%; min-width: unset; position: relative; top: 0; height: auto; max-height: 180px; }
+  .cards-panel { width: 100%; min-width: unset; position: relative; top: 0; height: auto; max-height: 200px; }
   .cats-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
+<div id="drag-ghost"></div>
 
 <div id="screen-intro">
   <div class="intro-box">
     <div class="intro-logo">be<span>O</span>bank</div>
     <h1>Bonjour et merci de participer à cette étude</h1>
     <p>Nous travaillons sur la refonte et l'amélioration du menu de l'espace connecté <strong>Beobank Online</strong>. <strong>L'objectif</strong> est simple : comprendre comment vous, en tant qu'utilisateur, organisez naturellement les fonctionnalités d'une banque en ligne.</p>
-    <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
-    <p style="font-weight:600;margin-bottom:10px">Consignes</p>
-    <p>Vous allez voir apparaître une série de cartes, chacune représentant une action ou une fonctionnalité disponible dans l'<strong>espace connecté Beobank Online</strong>. Votre mission est de les regrouper de la façon qui vous semble la plus logique.</p>
-    <p style="margin-top:12px"><strong>Les catégories proposées sont là pour vous guider, mais elles ne sont pas obligatoires.</strong> Si vous estimez qu'une carte n'entre dans aucune catégorie existante, je vous invite à librement créer votre propre catégorie et lui donner le nom qui vous semble le plus adapté.</p>
-    <p style="margin-top:12px">Les catégories sont affichées aléatoirement. Vous pouvez les <strong>déplacer et réorganiser</strong> dans l'ordre qui vous semble le plus logique en les glissant.</p>
-    <p style="margin-top:12px">Il n'y a pas de bonne ou de mauvaise réponse. Vos réponses sont anonymes. L'exercice dure environ 15 à 30 minutes.</p>
-    <button class="btn-start" id="btn-start" style="margin-top:24px">Commencer →</button>
+    <hr style="border:none;border-top:1px solid #eee;margin:16px 0">
+    <p><strong>Consignes</strong></p>
+    <p style="margin-top:10px">Vous allez voir apparaître une série de cartes, chacune représentant une action ou une fonctionnalité disponible dans l'<strong>espace connecté Beobank Online</strong>. Votre mission est de les regrouper de la façon qui vous semble la plus logique.</p>
+    <p style="margin-top:10px"><strong>Les catégories proposées sont là pour vous guider, mais elles ne sont pas obligatoires.</strong> Si vous estimez qu'une carte n'entre dans aucune catégorie existante, je vous invite à librement créer votre propre catégorie et lui donner le nom qui vous semble le plus adapté.</p>
+    <p style="margin-top:10px">Les catégories sont affichées aléatoirement. Vous pouvez les <strong>déplacer et réorganiser</strong> dans l'ordre qui vous semble le plus logique en utilisant l'icône <strong>⠿</strong>.</p>
+    <p style="margin-top:10px">Il n'y a pas de bonne ou de mauvaise réponse. Vos réponses sont anonymes. L'exercice dure environ 15 à 30 minutes.</p>
+    <div class="intro-note">Vos réponses sont anonymes et utilisées uniquement dans le cadre d'une étude UX interne.</div>
+    <button class="btn-start" id="btn-start">Commencer →</button>
   </div>
 </div>
 
 <div id="screen-sorting">
   <div class="top-bar">
     <div class="top-logo">be<span>O</span>bank</div>
-    <div class="progress-wrap">
-      <div class="progress-text"><span id="cnt">0</span> / 35 cartes classées</div>
-      <div class="progress-bar"><div class="progress-fill" id="pfill"></div></div>
+    <div class="prog-wrap">
+      <div class="prog-text"><span id="cnt">0</span> / 35 classées</div>
+      <div class="prog-bar"><div class="prog-fill" id="pfill"></div></div>
     </div>
     <button class="btn-done" id="btn-done">Terminer</button>
   </div>
@@ -131,248 +120,192 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <h2>Merci</h2>
     <p>Merci encore pour votre participation. Vos retours sont extrêmement utiles pour déterminer comment organiser et améliorer notre menu.</p>
     <div id="send-status"></div>
-    <div class="summary" id="summary"></div>
   </div>
 </div>
 
 <script>
-var SHEET_URL = 'https://script.google.com/macros/s/AKfycbyv2-EY6eWbqDu8Jlx2ICBGtQVo6gvoxiYBJBF5bRwc35Kl4HGJzYTP6d2wk_3FS4y8/exec';
+var SHEET_URL='https://script.google.com/macros/s/AKfycbyv2-EY6eWbqDu8Jlx2ICBGtQVo6gvoxiYBJBF5bRwc35Kl4HGJzYTP6d2wk_3FS4y8/exec';
+var CARDS=[{id:'C01',label:"Consulter mon solde"},{id:'C02',label:"Voir mes dernières transactions"},{id:'C03',label:"Voir mes comptes d'épargne"},{id:'C04',label:"Voir mes cartes de crédit"},{id:'C05',label:"Voir mes assurances"},{id:'C06',label:"Voir mes investissements"},{id:'C07',label:"Voir mes simulations et souscriptions"},{id:'C08',label:"Faire un virement entre mes comptes"},{id:'C09',label:"Faire un virement vers quelqu'un"},{id:'C10',label:"Ajouter ou modifier un bénéficiaire"},{id:'C11',label:"Mettre en place un ordre permanent"},{id:'C12',label:"Gérer mes domiciliations"},{id:'C13',label:"Payer une facture via Zoomit"},{id:'C14',label:"Modifier les limites de ma carte"},{id:'C15',label:"Bloquer ma carte"},{id:'C16',label:"Modifier le code PIN de ma carte"},{id:'C17',label:"Voir mes points / Miles / Cashback"},{id:'C18',label:"Télécharger un relevé de compte"},{id:'C19',label:"Consulter mes documents et contrats"},{id:'C20',label:"S'inscrire aux relevés en ligne"},{id:'C21',label:"Exporter mes opérations bancaires"},{id:'C22',label:"Analyser mon budget"},{id:'C23',label:"Catégoriser mes dépenses"},{id:'C24',label:"Faire un devis d'assurance"},{id:'C25',label:"Déclarer un sinistre"},{id:'C26',label:"Espace formalités médicales"},{id:'C27',label:"Modifier mes informations personnelles"},{id:'C28',label:"Consulter mon IBAN"},{id:'C29',label:"Changer mon mot de passe"},{id:'C30',label:"Changer mon identifiant"},{id:'C31',label:"Activer l'application mobile"},{id:'C32',label:"Bloquer l'accès à Beobank Online"},{id:'C33',label:"Voir l'historique de mes connexions"},{id:'C34',label:"Paramétrer mes alertes"},{id:'C35',label:"Contacter / Écrire à mon conseiller"}];
+var PRESET=["Mes investissements","Paiements & Opérations","Mes comptes et cartes","Mon profil & sécurité"];
+var unsorted=[],cats=[],catId=0;
+var ghost=document.getElementById('drag-ghost');
+var dg={active:false,type:null,cardId:null,cardLabel:null,fromCat:null};
+var cg={active:false,id:null};
 
-var CARDS = [
-  {id:'C01',label:"Consulter mon solde"},
-  {id:'C02',label:"Voir mes dernières transactions"},
-  {id:'C03',label:"Voir mes comptes d'épargne"},
-  {id:'C04',label:"Voir mes cartes de crédit"},
-  {id:'C05',label:"Voir mes assurances"},
-  {id:'C06',label:"Voir mes investissements"},
-  {id:'C07',label:"Voir mes simulations et souscriptions"},
-  {id:'C08',label:"Faire un virement entre mes comptes"},
-  {id:'C09',label:"Faire un virement vers quelqu'un"},
-  {id:'C10',label:"Ajouter ou modifier un bénéficiaire"},
-  {id:'C11',label:"Mettre en place un ordre permanent"},
-  {id:'C12',label:"Gérer mes domiciliations"},
-  {id:'C13',label:"Payer une facture via Zoomit"},
-  {id:'C14',label:"Modifier les limites de ma carte"},
-  {id:'C15',label:"Bloquer ma carte"},
-  {id:'C16',label:"Modifier le code PIN de ma carte"},
-  {id:'C17',label:"Voir mes points / Miles / Cashback"},
-  {id:'C18',label:"Télécharger un relevé de compte"},
-  {id:'C19',label:"Consulter mes documents et contrats"},
-  {id:'C20',label:"S'inscrire aux relevés en ligne"},
-  {id:'C21',label:"Exporter mes opérations bancaires"},
-  {id:'C22',label:"Analyser mon budget"},
-  {id:'C23',label:"Catégoriser mes dépenses"},
-  {id:'C24',label:"Faire un devis d'assurance"},
-  {id:'C25',label:"Déclarer un sinistre"},
-  {id:'C26',label:"Espace formalités médicales"},
-  {id:'C27',label:"Modifier mes informations personnelles"},
-  {id:'C28',label:"Consulter mon IBAN"},
-  {id:'C29',label:"Changer mon mot de passe"},
-  {id:'C30',label:"Changer mon identifiant"},
-  {id:'C31',label:"Activer l'application mobile"},
-  {id:'C32',label:"Bloquer l'accès à Beobank Online"},
-  {id:'C33',label:"Voir l'historique de mes connexions"},
-  {id:'C34',label:"Paramétrer mes alertes"},
-  {id:'C35',label:"Contacter / Écrire à mon conseiller"}
-];
+function shuffle(a){var r=a.slice();for(var i=r.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=r[i];r[i]=r[j];r[j]=t;}return r;}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function xy(e){if(e.touches&&e.touches.length)return{x:e.touches[0].clientX,y:e.touches[0].clientY};if(e.changedTouches&&e.changedTouches.length)return{x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY};return{x:e.clientX,y:e.clientY};}
+function showG(txt,x,y){ghost.textContent=txt;ghost.style.display='block';ghost.style.left=(x+12)+'px';ghost.style.top=(y-20)+'px';}
+function moveG(x,y){ghost.style.left=(x+12)+'px';ghost.style.top=(y-20)+'px';}
+function hideG(){ghost.style.display='none';}
+function boxAt(x,y){ghost.style.display='none';var el=document.elementFromPoint(x,y);ghost.style.display='block';if(!el)return null;return el.closest?el.closest('.cat-box'):null;}
+function clearDropOver(){document.querySelectorAll('.cat-box').forEach(function(b){b.classList.remove('drop-over','cat-drop-over');});}
 
-var PRESET = ["Mes investissements","Paiements & Opérations","Mes comptes et cartes","Mon profil & sécurité"];
-var unsorted = [], cats = [], catId = 0, dragCard = null, dragFrom = null;
-
-function shuffle(a) {
-  var arr = a.slice();
-  for (var i = arr.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
-  }
-  return arr;
-}
-
-function esc(s) {
-  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-document.getElementById('btn-start').onclick = function() {
-  unsorted = shuffle(CARDS);
-  cats = PRESET.map(function(n,i){ return {id:'c'+i, name:n, cards:[], custom:false}; });
-  catId = PRESET.length;
-  document.getElementById('screen-intro').style.display = 'none';
-  document.getElementById('screen-sorting').style.display = 'flex';
+document.getElementById('btn-start').onclick=function(){
+  unsorted=shuffle(CARDS);
+  cats=PRESET.map(function(n,i){return{id:'c'+i,name:n,cards:[],custom:false};});
+  catId=PRESET.length;
+  document.getElementById('screen-intro').style.display='none';
+  document.getElementById('screen-sorting').style.display='flex';
   render();
 };
 
-document.getElementById('btn-addcat').onclick = function() {
-  cats.push({id:'c'+(catId++), name:'', cards:[], custom:true});
+document.getElementById('btn-addcat').onclick=function(){
+  cats.push({id:'c'+(catId++),name:'',cards:[],custom:true});
   render();
-  setTimeout(function(){
-    var inp = document.querySelectorAll('.cat-label-input');
-    if(inp.length) inp[inp.length-1].focus();
-  }, 50);
+  setTimeout(function(){var inp=document.querySelectorAll('.cat-label-input');if(inp.length)inp[inp.length-1].focus();},60);
 };
 
-document.getElementById('btn-done').onclick = function() {
-  document.getElementById('screen-sorting').style.display = 'none';
-  document.getElementById('screen-complete').style.display = 'flex';
-  showSummary();
+document.getElementById('btn-done').onclick=function(){
+  document.getElementById('screen-sorting').style.display='none';
+  document.getElementById('screen-complete').style.display='flex';
   sendData();
 };
 
+// Global move/end
+document.addEventListener('mousemove',onMove);
+document.addEventListener('touchmove',onMove,{passive:false});
+document.addEventListener('mouseup',onEnd);
+document.addEventListener('touchend',onEnd,{passive:false});
 
-function render() { renderCards(); renderCats(); updateProgress(); }
-
-function renderCards() {
-  var list = document.getElementById('cards-list');
-  list.innerHTML = '';
-  if (!unsorted.length) {
-    list.innerHTML = '<div style="text-align:center;color:#bbb;font-size:12px;padding:20px">Toutes les cartes sont classées !</div>';
+function onMove(e){
+  if(dg.active){
+    e.preventDefault();
+    var p=xy(e);moveG(p.x,p.y);
+    clearDropOver();
+    var b=boxAt(p.x,p.y);
+    if(b)b.classList.add('drop-over');
   }
-  unsorted.forEach(function(card) {
-    var el = document.createElement('div');
-    el.className = 'card-chip';
-    el.draggable = true;
-    el.innerHTML = esc(card.label);
-    el.ondragstart = function() { dragCard=card; dragFrom='unsorted'; setTimeout(function(){el.classList.add('dragging');},0); };
-    el.ondragend = function() { el.classList.remove('dragging'); };
+  if(cg.active){
+    e.preventDefault();
+    var p=xy(e);moveG(p.x,p.y);
+    clearDropOver();
+    var b=boxAt(p.x,p.y);
+    if(b&&b.dataset.catid!==cg.id)b.classList.add('cat-drop-over');
+  }
+}
+
+function onEnd(e){
+  if(dg.active){
+    var p=xy(e);
+    clearDropOver();
+    document.querySelectorAll('.is-dragging').forEach(function(el){el.classList.remove('is-dragging');});
+    hideG();
+    var b=boxAt(p.x,p.y);
+    if(b)dropCardOn(b.dataset.catid);
+    dg.active=false;dg.cardId=null;
+  }
+  if(cg.active){
+    var p=xy(e);
+    clearDropOver();
+    document.querySelectorAll('.cat-dragging').forEach(function(el){el.classList.remove('cat-dragging');});
+    hideG();
+    var b=boxAt(p.x,p.y);
+    if(b&&b.dataset.catid&&b.dataset.catid!==cg.id){
+      var fi=cats.findIndex(function(c){return c.id===cg.id;});
+      var ti=cats.findIndex(function(c){return c.id===b.dataset.catid;});
+      if(fi!==-1&&ti!==-1){var m=cats.splice(fi,1)[0];cats.splice(ti,0,m);render();}
+    }
+    cg.active=false;cg.id=null;
+  }
+}
+
+function startCardDrag(e,el,cardId,cardLabel,fromCat){
+  if(e.target.classList.contains('placed-rm'))return;
+  e.preventDefault();e.stopPropagation();
+  dg.active=true;dg.cardId=cardId;dg.cardLabel=cardLabel;dg.fromCat=fromCat;
+  el.classList.add('is-dragging');
+  var p=xy(e);showG(cardLabel,p.x,p.y);
+}
+
+function startCatDrag(e,el,box,catId){
+  e.preventDefault();e.stopPropagation();
+  cg.active=true;cg.id=catId;
+  box.classList.add('cat-dragging');
+  var cat=cats.find(function(c){return c.id===catId;});
+  var p=xy(e);showG('📂 '+(cat?cat.name||'Catégorie':'Catégorie'),p.x,p.y);
+}
+
+function dropCardOn(tid){
+  if(!dg.cardId)return;
+  var card=CARDS.find(function(c){return c.id===dg.cardId;});
+  if(!card)return;
+  if(dg.fromCat===null)unsorted=unsorted.filter(function(c){return c.id!==card.id;});
+  else if(dg.fromCat!==tid){var src=cats.find(function(c){return c.id===dg.fromCat;});if(src)src.cards=src.cards.filter(function(c){return c.id!==card.id;});}
+  else return;
+  var tgt=cats.find(function(c){return c.id===tid;});
+  if(tgt&&!tgt.cards.find(function(c){return c.id===card.id;}))tgt.cards.push(card);
+  dg.cardId=null;render();
+}
+
+function render(){renderCards();renderCats();updateProgress();}
+
+function renderCards(){
+  var list=document.getElementById('cards-list');list.innerHTML='';
+  if(!unsorted.length){list.innerHTML='<div style="text-align:center;color:#bbb;font-size:12px;padding:20px">Toutes les cartes sont classées !</div>';document.getElementById('ucnt').textContent='0';return;}
+  unsorted.forEach(function(card){
+    var el=document.createElement('div');el.className='card-chip';el.textContent=card.label;
+    el.addEventListener('mousedown',function(e){startCardDrag(e,el,card.id,card.label,null);});
+    el.addEventListener('touchstart',function(e){startCardDrag(e,el,card.id,card.label,null);},{passive:false});
     list.appendChild(el);
   });
-  document.getElementById('ucnt').textContent = unsorted.length;
+  document.getElementById('ucnt').textContent=unsorted.length;
 }
 
-function renderCats() {
-  var grid = document.getElementById('cats-grid');
-  grid.innerHTML = '';
-  cats.forEach(function(cat) {
-    var box = document.createElement('div');
-    box.className = 'cat-box'+(cat.custom?' custom':'');
-    var th = '<div class="cat-top" draggable="true" data-catid="'+cat.id+'">';
-    th += '<span class="drag-handle">⠿</span>';
-    if (cat.custom) th += '<input class="cat-label-input" placeholder="Nom de la catégorie..." value="'+esc(cat.name)+'" data-id="'+cat.id+'">';
-    else th += '<div class="cat-label">'+esc(cat.name)+'</div>';
-    th += '<span class="cat-count">'+cat.cards.length+'</span>';
-    if (cat.custom) th += '<button class="cat-del" data-id="'+cat.id+'">×</button>';
-    th += '</div>';
-    var bh = '<div class="cat-body">';
-    if (!cat.cards.length) bh += '<div class="cat-empty">Glissez des cartes ici</div>';
-    else cat.cards.forEach(function(c){
-      bh += '<div class="placed-card" draggable="true" data-cid="'+c.id+'" data-cat="'+cat.id+'">'
-        +'<span>'+esc(c.label)+'</span>'
-        +'<span class="placed-rm" data-cid="'+c.id+'" data-cat="'+cat.id+'">↩</span></div>';
-    });
-    bh += '</div>';
-    box.innerHTML = th + bh;
-
-    box.ondragover = function(e){ e.preventDefault(); box.classList.add('over'); };
-    box.ondragleave = function(){ box.classList.remove('over'); };
-    box.ondrop = function(e){ e.preventDefault(); box.classList.remove('over'); dropOn(cat.id); };
-
+function renderCats(){
+  var grid=document.getElementById('cats-grid');grid.innerHTML='';
+  cats.forEach(function(cat){
+    var box=document.createElement('div');box.className='cat-box'+(cat.custom?' custom':'');box.dataset.catid=cat.id;
+    var top=document.createElement('div');top.className='cat-top';
+    // Handle
+    var h=document.createElement('span');h.className='cat-handle';h.textContent='⠿';
+    h.addEventListener('mousedown',function(e){startCatDrag(e,h,box,cat.id);});
+    h.addEventListener('touchstart',function(e){startCatDrag(e,h,box,cat.id);},{passive:false});
+    top.appendChild(h);
+    // Label
+    if(cat.custom){var inp=document.createElement('input');inp.className='cat-label-input';inp.placeholder='Nom de la catégorie...';inp.value=cat.name;inp.dataset.id=cat.id;inp.oninput=function(){var c=cats.find(function(x){return x.id===inp.dataset.id;});if(c)c.name=inp.value;};top.appendChild(inp);}
+    else{var lbl=document.createElement('div');lbl.className='cat-label';lbl.textContent=cat.name;top.appendChild(lbl);}
+    // Count
+    var cnt=document.createElement('span');cnt.className='cat-count';cnt.textContent=cat.cards.length;top.appendChild(cnt);
+    // Delete (custom only)
+    if(cat.custom){var del=document.createElement('button');del.className='cat-del';del.textContent='×';(function(id){del.onclick=function(){var c=cats.find(function(x){return x.id===id;});if(c){c.cards.forEach(function(card){unsorted.push(card);});unsorted.sort(function(a,b){return a.id.localeCompare(b.id);});cats=cats.filter(function(x){return x.id!==id;});render();}};})(cat.id);top.appendChild(del);}
+    box.appendChild(top);
+    // Body
+    var body=document.createElement('div');body.className='cat-body';
+    if(!cat.cards.length){body.innerHTML='<div class="cat-empty">Glissez des cartes ici</div>';}
+    else{cat.cards.forEach(function(c){
+      var pc=document.createElement('div');pc.className='placed-card';
+      var txt=document.createElement('span');txt.textContent=c.label;
+      var rm=document.createElement('span');rm.className='placed-rm';rm.textContent='↩';
+      (function(cardId,catId){rm.onclick=function(e){e.stopPropagation();var cc=cats.find(function(x){return x.id===catId;});var card=CARDS.find(function(x){return x.id===cardId;});if(cc&&card){cc.cards=cc.cards.filter(function(x){return x.id!==card.id;});unsorted.push(card);unsorted.sort(function(a,b){return a.id.localeCompare(b.id);});render();}};})(c.id,cat.id);
+      pc.appendChild(txt);pc.appendChild(rm);
+      (function(cardId,cardLabel,catId){
+        pc.addEventListener('mousedown',function(e){startCardDrag(e,pc,cardId,cardLabel,catId);});
+        pc.addEventListener('touchstart',function(e){startCardDrag(e,pc,cardId,cardLabel,catId);},{passive:false});
+      })(c.id,c.label,cat.id);
+      body.appendChild(pc);
+    });}
+    box.appendChild(body);
     grid.appendChild(box);
   });
-
-  grid.querySelectorAll('.cat-label-input').forEach(function(inp){
-    inp.oninput = function(){
-      var c = cats.find(function(x){return x.id===inp.dataset.id;});
-      if(c) c.name = inp.value;
-    };
-  });
-  grid.querySelectorAll('.cat-del').forEach(function(btn){
-    btn.onclick = function(){
-      var c = cats.find(function(x){return x.id===btn.dataset.id;});
-      if(c){ c.cards.forEach(function(card){unsorted.push(card);}); unsorted.sort(function(a,b){return a.id.localeCompare(b.id);}); cats=cats.filter(function(x){return x.id!==btn.dataset.id;}); render(); }
-    };
-  });
-  grid.querySelectorAll('.placed-rm').forEach(function(btn){
-    btn.onclick = function(e){
-      e.stopPropagation();
-      var c = cats.find(function(x){return x.id===btn.dataset.cat;});
-      var card = CARDS.find(function(x){return x.id===btn.dataset.cid;});
-      if(c&&card){ c.cards=c.cards.filter(function(x){return x.id!==card.id;}); unsorted.push(card); unsorted.sort(function(a,b){return a.id.localeCompare(b.id);}); render(); }
-    };
-  });
-  // Category reorder drag
-  var dragCatId = null;
-  grid.querySelectorAll('.cat-top').forEach(function(handle) {
-    var box = handle.closest('.cat-box') || handle.parentElement;
-    handle.ondragstart = function(e) {
-      dragCatId = handle.dataset.catid;
-      e.stopPropagation();
-      setTimeout(function(){ if(box) box.classList.add('drag-reorder'); }, 0);
-    };
-    handle.ondragend = function() { if(box) box.classList.remove('drag-reorder'); dragCatId = null; };
-    box.ondragover = function(e) {
-      if (dragCatId && dragCatId !== handle.dataset.catid) {
-        e.preventDefault(); e.stopPropagation();
-        box.classList.add('reorder-over');
-      }
-    };
-    box.ondragleave = function() { box.classList.remove('reorder-over'); };
-    box.ondrop = function(e) {
-      box.classList.remove('reorder-over');
-      if (!dragCatId || dragCatId === handle.dataset.catid) return;
-      // Check if this is a reorder drop (not a card drop)
-      if (!dragCard) {
-        e.stopPropagation();
-        var fromIdx = cats.findIndex(function(c){ return c.id === dragCatId; });
-        var toIdx = cats.findIndex(function(c){ return c.id === handle.dataset.catid; });
-        if (fromIdx !== -1 && toIdx !== -1) {
-          var moved = cats.splice(fromIdx, 1)[0];
-          cats.splice(toIdx, 0, moved);
-          render();
-        }
-      }
-    };
-  });
-
-  grid.querySelectorAll('.placed-card').forEach(function(el){
-    el.ondragstart = function(){ dragCard=CARDS.find(function(x){return x.id===el.dataset.cid;}); dragFrom=el.dataset.cat; setTimeout(function(){el.classList.add('dragging');},0); };
-    el.ondragend = function(){ el.classList.remove('dragging'); };
-  });
 }
 
-function dropOn(tid) {
-  if (!dragCard) return;
-  if (dragFrom===tid) { dragCard=null; return; }
-  if (dragFrom==='unsorted') unsorted=unsorted.filter(function(c){return c.id!==dragCard.id;});
-  else { var s=cats.find(function(c){return c.id===dragFrom;}); if(s) s.cards=s.cards.filter(function(c){return c.id!==dragCard.id;}); }
-  var t=cats.find(function(c){return c.id===tid;});
-  if(t&&!t.cards.find(function(c){return c.id===dragCard.id;})) t.cards.push(dragCard);
-  dragCard=null; dragFrom=null;
-  render();
+function updateProgress(){
+  var s=CARDS.length-unsorted.length;
+  document.getElementById('cnt').textContent=s;
+  document.getElementById('pfill').style.width=(s/CARDS.length*100)+'%';
+  var btn=document.getElementById('btn-done');
+  if(s>0)btn.classList.add('ready');else btn.classList.remove('ready');
 }
 
-function updateProgress() {
-  var s = CARDS.length - unsorted.length;
-  document.getElementById('cnt').textContent = s;
-  document.getElementById('pfill').style.width = (s/CARDS.length*100)+'%';
-  var btn = document.getElementById('btn-done');
-  if(s>0) btn.classList.add('ready'); else btn.classList.remove('ready');
-}
+function getResults(){return{timestamp:new Date().toISOString(),unsorted:unsorted.map(function(c){return c.id;}),categories:cats.filter(function(c){return c.cards.length>0;}).map(function(c){return{name:c.name||'(sans nom)',isCustom:c.custom,cards:c.cards.map(function(x){return{id:x.id,label:x.label};})};})  };}
 
-function getResults() {
-  return {
-    timestamp: new Date().toISOString(),
-    unsorted: unsorted.map(function(c){return c.id;}),
-    categories: cats.filter(function(c){return c.cards.length>0;}).map(function(c){
-      return {name:c.name||'(sans nom)', isCustom:c.custom, cards:c.cards.map(function(x){return {id:x.id,label:x.label};})};
-    })
-  };
-}
-
-function showSummary() {
-  var r=getResults(), html='<h4>Vos groupements</h4>';
-  r.categories.forEach(function(c){
-    html+='<div class="sum-cat"><div class="sum-cat-name">'+esc(c.name)+(c.isCustom?' ✦':'')+ ' ('+c.cards.length+')</div>'
-      +'<div class="sum-cat-cards">'+c.cards.map(function(x){return x.label;}).join(', ')+'</div></div>';
-  });
-  if(r.unsorted.length) html+='<div class="sum-cat"><div class="sum-cat-name" style="color:#bbb">Non classées ('+r.unsorted.length+')</div></div>';
-  document.getElementById('summary').innerHTML = html;
-}
-
-function sendData() {
-  var st = document.getElementById('send-status');
-  st.style.color='#888'; st.textContent='⏳ Envoi en cours...';
-  fetch(SHEET_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(getResults())})
-    .then(function(){ st.style.color='#1a7f5e'; st.textContent='✅ Réponses enregistrées. Merci !'; })
-    .catch(function(){ st.style.color='#e2001a'; st.textContent='⚠️ Erreur — merci de télécharger vos résultats.'; });
+function sendData(){
+  var st=document.getElementById('send-status');
+  st.style.color='#888';st.textContent='Envoi en cours...';
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(getResults())})
+    .then(function(){st.style.color='#1a7f5e';st.textContent='Réponses enregistrées. Merci !';})
+    .catch(function(){st.style.color='#e2001a';st.textContent='Erreur réseau.';});
 }
 </script>
 </body>
