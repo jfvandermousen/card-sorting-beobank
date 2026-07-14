@@ -59,10 +59,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 .placed-rm { margin-left: auto; color: #ccc; cursor: pointer; font-size: 13px; flex-shrink: 0; }
 .placed-rm:hover { color: #e2001a; }
-.cat-box.drag-reorder { opacity: 0.4; }
-.cat-box.reorder-over { border-color: #572381 !important; box-shadow: -3px 0 0 #572381; }
-.cat-box .drag-handle { cursor: grab; color: #ccc; font-size: 14px; margin-right: 4px; }
-.cat-box .drag-handle:hover { color: #888; }
 #screen-complete { display: none; min-height: 100vh; align-items: center; justify-content: center; background: #fff; }
 .done-box { max-width: 480px; width: 90%; text-align: center; padding: 48px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
 .done-icon { font-size: 52px; margin-bottom: 18px; }
@@ -92,7 +88,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <p style="font-weight:600;margin-bottom:10px">Consignes</p>
     <p>Vous allez voir apparaître une série de cartes, chacune représentant une action ou une fonctionnalité disponible dans l'<strong>espace connecté Beobank Online</strong>. Votre mission est de les regrouper de la façon qui vous semble la plus logique.</p>
     <p style="margin-top:12px"><strong>Les catégories proposées sont là pour vous guider, mais elles ne sont pas obligatoires.</strong> Si vous estimez qu'une carte n'entre dans aucune catégorie existante, je vous invite à librement créer votre propre catégorie et lui donner le nom qui vous semble le plus adapté.</p>
-    <p style="margin-top:12px">Les catégories sont affichées aléatoirement. Vous pouvez les <strong>déplacer et réorganiser</strong> dans l'ordre qui vous semble le plus logique en les glissant.</p>
+    <p style="margin-top:12px">Les catégories sont affichées aléatoirement, vous pouvez les réordonner de la manière qui vous semble la plus logique.</p>
     <p style="margin-top:12px">Il n'y a pas de bonne ou de mauvaise réponse. Vos réponses sont anonymes. L'exercice dure environ 15 à 30 minutes.</p>
     <button class="btn-start" id="btn-start" style="margin-top:24px">Commencer →</button>
   </div>
@@ -244,8 +240,7 @@ function renderCats() {
   cats.forEach(function(cat) {
     var box = document.createElement('div');
     box.className = 'cat-box'+(cat.custom?' custom':'');
-    var th = '<div class="cat-top" draggable="true" data-catid="'+cat.id+'">';
-    th += '<span class="drag-handle">⠿</span>';
+    var th = '<div class="cat-top">';
     if (cat.custom) th += '<input class="cat-label-input" placeholder="Nom de la catégorie..." value="'+esc(cat.name)+'" data-id="'+cat.id+'">';
     else th += '<div class="cat-label">'+esc(cat.name)+'</div>';
     th += '<span class="cat-count">'+cat.cards.length+'</span>';
@@ -288,40 +283,6 @@ function renderCats() {
       if(c&&card){ c.cards=c.cards.filter(function(x){return x.id!==card.id;}); unsorted.push(card); unsorted.sort(function(a,b){return a.id.localeCompare(b.id);}); render(); }
     };
   });
-  // Category reorder drag
-  var dragCatId = null;
-  grid.querySelectorAll('.cat-top').forEach(function(handle) {
-    var box = handle.closest('.cat-box') || handle.parentElement;
-    handle.ondragstart = function(e) {
-      dragCatId = handle.dataset.catid;
-      e.stopPropagation();
-      setTimeout(function(){ if(box) box.classList.add('drag-reorder'); }, 0);
-    };
-    handle.ondragend = function() { if(box) box.classList.remove('drag-reorder'); dragCatId = null; };
-    box.ondragover = function(e) {
-      if (dragCatId && dragCatId !== handle.dataset.catid) {
-        e.preventDefault(); e.stopPropagation();
-        box.classList.add('reorder-over');
-      }
-    };
-    box.ondragleave = function() { box.classList.remove('reorder-over'); };
-    box.ondrop = function(e) {
-      box.classList.remove('reorder-over');
-      if (!dragCatId || dragCatId === handle.dataset.catid) return;
-      // Check if this is a reorder drop (not a card drop)
-      if (!dragCard) {
-        e.stopPropagation();
-        var fromIdx = cats.findIndex(function(c){ return c.id === dragCatId; });
-        var toIdx = cats.findIndex(function(c){ return c.id === handle.dataset.catid; });
-        if (fromIdx !== -1 && toIdx !== -1) {
-          var moved = cats.splice(fromIdx, 1)[0];
-          cats.splice(toIdx, 0, moved);
-          render();
-        }
-      }
-    };
-  });
-
   grid.querySelectorAll('.placed-card').forEach(function(el){
     el.ondragstart = function(){ dragCard=CARDS.find(function(x){return x.id===el.dataset.cid;}); dragFrom=el.dataset.cat; setTimeout(function(){el.classList.add('dragging');},0); };
     el.ondragend = function(){ el.classList.remove('dragging'); };
