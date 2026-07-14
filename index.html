@@ -1,0 +1,537 @@
+
+
+Aller au contenu
+Utiliser Gmail avec un lecteur d'écran
+Conversations
+14 % sur 15 Go utilisés
+Conditions d'utilisation · Confidentialité · Règlement du programme
+Dernière activité sur le compte : il y a 0 minute
+Ce compte est ouvert depuis un autre emplacement. · Détails
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Sorting — Beobank Online</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #1a1a1a; }
+
+  /* INTRO */
+  #screen-intro {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #fff;
+  }
+  .intro-box {
+    max-width: 620px; width: 90%; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px;
+    padding: 48px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  .intro-logo { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 32px; }
+  .intro-logo span { color: #e2001a; }
+  .intro-box h1 { font-size: 26px; font-weight: 700; margin-bottom: 16px; }
+  .intro-box p { color: #555; line-height: 1.7; margin-bottom: 16px; font-size: 15px; }
+  .intro-box ul { color: #555; line-height: 1.9; padding-left: 20px; margin-bottom: 24px; font-size: 15px; }
+  .intro-note { background: #f5f0fa; border-left: 3px solid #572381; padding: 14px 18px; border-radius: 4px; font-size: 14px; color: #572381; margin-bottom: 28px; }
+  .btn-primary {
+    background: #1a7f5e; color: #fff; border: none; padding: 14px 32px; border-radius: 6px;
+    font-size: 16px; font-weight: 600; cursor: pointer; width: 100%;
+  }
+  .btn-primary:hover { background: #156b4f; }
+
+  /* SORTING SCREEN */
+  #screen-sorting { display: none; flex-direction: column; min-height: 100vh; }
+  .top-bar {
+    background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0 24px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100;
+  }
+  .top-bar-logo { font-size: 16px; font-weight: 700; }
+  .top-bar-logo span { color: #e2001a; }
+  .top-bar-progress { font-size: 13px; color: #888; }
+  .progress-bar { width: 200px; height: 6px; background: #e0e0e0; border-radius: 3px; margin-top: 4px; }
+  .progress-fill { height: 100%; background: #1a7f5e; border-radius: 3px; transition: width 0.3s; }
+  .btn-finish {
+    background: #1a7f5e; color: #fff; border: none; padding: 8px 20px; border-radius: 6px;
+    font-size: 14px; font-weight: 600; cursor: pointer; opacity: 0.5; pointer-events: none;
+  }
+  .btn-finish.active { opacity: 1; pointer-events: all; }
+  .btn-finish.active:hover { background: #156b4f; }
+
+  .sorting-layout { display: flex; flex: 1; }
+
+  /* CARDS PANEL */
+  .cards-panel {
+    width: 280px; min-width: 280px; background: #fff; border-right: 1px solid #e0e0e0;
+    display: flex; flex-direction: column; position: sticky; top: 56px; height: calc(100vh - 56px); overflow: hidden;
+  }
+  .panel-header { padding: 16px 20px; border-bottom: 1px solid #e0e0e0; }
+  .panel-header h3 { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .panel-header .count { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-top: 2px; }
+  .cards-list { overflow-y: auto; padding: 12px; flex: 1; }
+  .card-item {
+    background: #fff; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 10px 14px;
+    margin-bottom: 8px; font-size: 13px; cursor: grab; user-select: none;
+    transition: all 0.15s; line-height: 1.4;
+  }
+  .card-item:hover { border-color: #572381; box-shadow: 0 2px 8px rgba(87,35,129,0.12); }
+  .card-item.dragging { opacity: 0.4; transform: scale(0.96); }
+  .card-item .card-num { font-size: 10px; color: #aaa; font-weight: 600; margin-bottom: 2px; }
+
+  /* CATEGORIES PANEL */
+  .categories-panel { flex: 1; padding: 20px; overflow-y: auto; background: #f5f5f5; }
+  .categories-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .categories-header h3 { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+  .btn-add-cat {
+    background: #fff; border: 1.5px solid #572381; color: #572381; padding: 7px 14px;
+    border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .btn-add-cat:hover { background: #f5f0fa; }
+
+  .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+
+  .category-col { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
+  .category-col.custom { border-color: #572381; }
+  .category-col.drag-over { border-color: #1a7f5e; box-shadow: 0 0 0 3px rgba(26,127,94,0.15); }
+  .cat-header {
+    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .cat-name { font-size: 14px; font-weight: 600; color: #1a1a1a; flex: 1; }
+  .cat-name input {
+    border: none; outline: none; font-size: 14px; font-weight: 600; color: #572381;
+    width: 100%; background: transparent;
+  }
+  .cat-badge { font-size: 11px; color: #aaa; font-weight: 500; margin-left: 8px; }
+  .cat-delete { background: none; border: none; cursor: pointer; color: #ccc; font-size: 16px; padding: 0 4px; }
+  .cat-delete:hover { color: #e2001a; }
+  .cat-body { padding: 10px; min-height: 80px; }
+  .cat-empty { color: #bbb; font-size: 12px; text-align: center; padding: 20px 10px; border: 1.5px dashed #e0e0e0; border-radius: 6px; }
+  .cat-card {
+    background: #f9f9f9; border: 1px solid #e8e8e8; border-radius: 6px; padding: 8px 12px;
+    margin-bottom: 6px; font-size: 12px; line-height: 1.4; display: flex; align-items: flex-start;
+    gap: 6px; cursor: grab;
+  }
+  .cat-card:hover { background: #f0edf7; border-color: #c4a8e0; }
+  .cat-card .card-num { font-size: 10px; color: #aaa; font-weight: 600; white-space: nowrap; margin-top: 1px; }
+  .cat-card .remove-card { margin-left: auto; color: #ccc; cursor: pointer; font-size: 14px; flex-shrink: 0; }
+  .cat-card .remove-card:hover { color: #e2001a; }
+  .cat-card.dragging { opacity: 0.4; }
+
+  /* COMPLETE SCREEN */
+  #screen-complete {
+    display: none; min-height: 100vh; align-items: center; justify-content: center; background: #fff;
+  }
+  .complete-box {
+    max-width: 500px; width: 90%; text-align: center; padding: 48px;
+    background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  .complete-icon { font-size: 56px; margin-bottom: 20px; }
+  .complete-box h2 { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+  .complete-box p { color: #555; line-height: 1.7; margin-bottom: 28px; }
+  .btn-export {
+    background: #572381; color: #fff; border: none; padding: 12px 28px; border-radius: 6px;
+    font-size: 15px; font-weight: 600; cursor: pointer; margin: 6px;
+  }
+  .btn-export:hover { background: #3d1860; }
+  .btn-copy {
+    background: #fff; color: #572381; border: 2px solid #572381; padding: 12px 28px;
+    border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; margin: 6px;
+  }
+  .btn-copy:hover { background: #f5f0fa; }
+  .result-summary { background: #f5f5f5; border-radius: 8px; padding: 16px; margin-top: 20px; text-align: left; }
+  .result-summary h4 { font-size: 13px; font-weight: 600; color: #888; margin-bottom: 12px; text-transform: uppercase; }
+  .result-cat { margin-bottom: 10px; }
+  .result-cat-name { font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .result-cat-cards { font-size: 12px; color: #555; line-height: 1.6; }
+  .copied-msg { color: #1a7f5e; font-size: 13px; margin-top: 8px; display: none; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 6px;
+    font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999;
+  }
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .sorting-layout { flex-direction: column; }
+    .cards-panel { width: 100%; min-width: unset; position: relative; top: 0; height: auto; max-height: 200px; }
+    .categories-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="screen-intro">
+  <div class="intro-box">
+    <div class="intro-logo">be<span>O</span>bank</div>
+    <h1>Aide-nous à améliorer notre menu</h1>
+    <p>Nous travaillons sur l'amélioration de la navigation de l'espace connecté <strong>Beobank Online</strong>. Votre mission est simple : regrouper les fonctionnalités de la façon qui vous semble la plus logique.</p>
+    <ul>
+      <li>Il n'y a pas de bonne ou de mauvaise réponse</li>
+      <li>Des catégories vous sont proposées, mais vous pouvez en créer de nouvelles</li>
+      <li>Si une carte vous semble incompréhensible, laissez-la de côté</li>
+      <li>L'exercice dure environ 15 à 20 minutes</li>
+    </ul>
+    <div class="intro-note">
+      Vos réponses sont anonymes et utilisées uniquement dans le cadre d'une étude UX interne.
+    </div>
+    <button class="btn-primary" onclick="startSorting()">Commencer →</button>
+  </div>
+</div>
+
+<!-- SORTING -->
+<div id="screen-sorting">
+  <div class="top-bar">
+    <div class="top-bar-logo">be<span>O</span>bank — Card Sorting</div>
+    <div style="text-align:center">
+      <div class="top-bar-progress"><span id="sorted-count">0</span> / 35 cartes classées</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <button class="btn-finish" id="btn-finish" onclick="finishSorting()">Terminer</button>
+  </div>
+
+  <div class="sorting-layout">
+    <!-- Cards Panel -->
+    <div class="cards-panel">
+      <div class="panel-header">
+        <h3>Cartes à classer</h3>
+        <div class="count" id="unsorted-count">35</div>
+      </div>
+      <div class="cards-list" id="cards-list"></div>
+    </div>
+
+    <!-- Categories Panel -->
+    <div class="categories-panel">
+      <div class="categories-header">
+        <h3>Vos catégories</h3>
+        <button class="btn-add-cat" onclick="addCategory()">+ Nouvelle catégorie</button>
+      </div>
+      <div class="categories-grid" id="categories-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLETE -->
+<div id="screen-complete">
+  <div class="complete-box">
+    <div class="complete-icon">✅</div>
+    <h2>Merci pour votre participation !</h2>
+    <p>Votre tri a bien été enregistré. Voici un résumé de vos groupements.</p>
+    <div id="submit-status" style="font-size:14px;margin-bottom:16px;min-height:20px;color:#888"></div>
+    <div>
+      <button class="btn-export" onclick="exportJSON()">⬇ Télécharger mes résultats</button>
+      <button class="btn-copy" onclick="copyResults()">📋 Copier les résultats</button>
+    </div>
+    <div class="copied-msg" id="copied-msg">✓ Copié dans le presse-papiers !</div>
+    <div class="result-summary" id="result-summary"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CARDS = [
+  { id: "C01", label: "Consulter mon solde" },
+  { id: "C02", label: "Voir mes dernières transactions" },
+  { id: "C03", label: "Voir mes comptes d'épargne" },
+  { id: "C04", label: "Voir mes cartes de crédit" },
+  { id: "C05", label: "Voir mes assurances" },
+  { id: "C06", label: "Voir mes investissements" },
+  { id: "C07", label: "Voir mes simulations et souscriptions" },
+  { id: "C08", label: "Faire un virement entre mes comptes" },
+  { id: "C09", label: "Faire un virement vers quelqu'un" },
+  { id: "C10", label: "Ajouter ou modifier un bénéficiaire" },
+  { id: "C11", label: "Mettre en place un ordre permanent" },
+  { id: "C12", label: "Gérer mes domiciliations" },
+  { id: "C13", label: "Payer une facture via Zoomit" },
+  { id: "C14", label: "Modifier les limites de ma carte" },
+  { id: "C15", label: "Bloquer ma carte" },
+  { id: "C16", label: "Modifier le code PIN de ma carte" },
+  { id: "C17", label: "Voir mes points / Miles / Cashback" },
+  { id: "C18", label: "Télécharger un relevé de compte" },
+  { id: "C19", label: "Consulter mes documents et contrats" },
+  { id: "C20", label: "S'inscrire aux relevés en ligne" },
+  { id: "C21", label: "Exporter mes opérations bancaires" },
+  { id: "C22", label: "Analyser mon budget" },
+  { id: "C23", label: "Catégoriser mes dépenses" },
+  { id: "C24", label: "Faire un devis d'assurance" },
+  { id: "C25", label: "Déclarer un sinistre" },
+  { id: "C26", label: "Espace formalités médicales" },
+  { id: "C27", label: "Modifier mes informations personnelles" },
+  { id: "C28", label: "Consulter mon IBAN" },
+  { id: "C29", label: "Changer mon mot de passe" },
+  { id: "C30", label: "Changer mon identifiant" },
+  { id: "C31", label: "Activer l'application mobile" },
+  { id: "C32", label: "Bloquer l'accès à Beobank Online" },
+  { id: "C33", label: "Voir l'historique de mes connexions" },
+  { id: "C34", label: "Paramétrer mes alertes" },
+  { id: "C35", label: "Contacter / Écrire à mon conseiller" },
+];
+
+const PREDEFINED_CATS = [
+  "Mes comptes et cartes",
+  "Paiements & Opérations",
+  "Mes investissements",
+  "Mes assurances",
+  "Mon profil & sécurité"
+];
+
+let unsortedCards = [...CARDS];
+let categories = [];
+let draggedCard = null;
+let dragSource = null; // 'unsorted' | catId
+let catCounter = 0;
+
+function startSorting() {
+  document.getElementById('screen-intro').style.display = 'none';
+  document.getElementById('screen-sorting').style.display = 'flex';
+  // Shuffle cards
+  unsortedCards = [...CARDS].sort(() => Math.random() - 0.5);
+  // Init categories
+  categories = PREDEFINED_CATS.map((name, i) => ({
+    id: 'cat_' + i,
+    name,
+    cards: [],
+    isCustom: false
+  }));
+  catCounter = PREDEFINED_CATS.length;
+  render();
+}
+
+function render() {
+  renderCards();
+  renderCategories();
+  updateProgress();
+}
+
+function renderCards() {
+  const list = document.getElementById('cards-list');
+  list.innerHTML = '';
+  if (unsortedCards.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:#aaa;font-size:13px;padding:20px">Toutes les cartes sont classées !</div>';
+  }
+  unsortedCards.forEach(card => {
+    const el = document.createElement('div');
+    el.className = 'card-item';
+    el.draggable = true;
+    el.innerHTML = `<div class="card-num">${card.id}</div>${card.label}`;
+    el.addEventListener('dragstart', e => {
+      draggedCard = card;
+      dragSource = 'unsorted';
+      setTimeout(() => el.classList.add('dragging'), 0);
+    });
+    el.addEventListener('dragend', () => el.classList.remove('dragging'));
+    list.appendChild(el);
+  });
+  document.getElementById('unsorted-count').textContent = unsortedCards.length;
+}
+
+function renderCategories() {
+  const grid = document.getElementById('categories-grid');
+  grid.innerHTML = '';
+  categories.forEach(cat => {
+    const col = document.createElement('div');
+    col.className = 'category-col' + (cat.isCustom ? ' custom' : '');
+    col.innerHTML = `
+      <div class="cat-header">
+        ${cat.isCustom
+          ? `<input class="cat-name" value="${cat.name}" onchange="renameCategory('${cat.id}', this.value)" placeholder="Nom de la catégorie..." />`
+          : `<div class="cat-name">${cat.name}</div>`}
+        <span class="cat-badge">${cat.cards.length}</span>
+        ${cat.isCustom ? `<button class="cat-delete" onclick="deleteCategory('${cat.id}')" title="Supprimer">×</button>` : ''}
+      </div>
+      <div class="cat-body" id="body_${cat.id}">
+        ${cat.cards.length === 0
+          ? '<div class="cat-empty">Glissez des cartes ici</div>'
+          : cat.cards.map(c => `
+            <div class="cat-card" draggable="true"
+              data-card-id="${c.id}" data-cat-id="${cat.id}"
+              ondragstart="catCardDragStart(event, '${c.id}', '${cat.id}')"
+              ondragend="this.classList.remove('dragging')">
+              <span class="card-num">${c.id}</span>
+              <span>${c.label}</span>
+              <span class="remove-card" onclick="removeFromCat('${cat.id}', '${c.id}')" title="Remettre dans la liste">↩</span>
+            </div>`).join('')}
+      </div>
+    `;
+    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('drag-over'); });
+    col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+    col.addEventListener('drop', e => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      dropOnCategory(cat.id);
+    });
+    grid.appendChild(col);
+  });
+}
+
+function catCardDragStart(e, cardId, catId) {
+  const card = CARDS.find(c => c.id === cardId);
+  draggedCard = card;
+  dragSource = catId;
+  setTimeout(() => { if(e.target) e.target.classList.add('dragging'); }, 0);
+}
+
+function dropOnCategory(targetCatId) {
+  if (!draggedCard) return;
+  // Remove from source
+  if (dragSource === 'unsorted') {
+    unsortedCards = unsortedCards.filter(c => c.id !== draggedCard.id);
+  } else if (dragSource !== targetCatId) {
+    const sourceCat = categories.find(c => c.id === dragSource);
+    if (sourceCat) sourceCat.cards = sourceCat.cards.filter(c => c.id !== draggedCard.id);
+  } else {
+    draggedCard = null; return; // same category
+  }
+  // Add to target
+  const targetCat = categories.find(c => c.id === targetCatId);
+  if (targetCat && !targetCat.cards.find(c => c.id === draggedCard.id)) {
+    targetCat.cards.push(draggedCard);
+  }
+  draggedCard = null;
+  dragSource = null;
+  render();
+}
+
+function removeFromCat(catId, cardId) {
+  const cat = categories.find(c => c.id === catId);
+  const card = CARDS.find(c => c.id === cardId);
+  if (cat && card) {
+    cat.cards = cat.cards.filter(c => c.id !== cardId);
+    unsortedCards.push(card);
+    unsortedCards.sort((a, b) => a.id.localeCompare(b.id));
+    render();
+  }
+}
+
+function addCategory() {
+  categories.push({
+    id: 'cat_' + catCounter++,
+    name: '',
+    cards: [],
+    isCustom: true
+  });
+  render();
+  // Focus the new input
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('.cat-name input');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+  }, 50);
+}
+
+function renameCategory(catId, name) {
+  const cat = categories.find(c => c.id === catId);
+  if (cat) cat.name = name;
+}
+
+function deleteCategory(catId) {
+  const cat = categories.find(c => c.id === catId);
+  if (cat) {
+    // Return cards to unsorted
+    unsortedCards.push(...cat.cards);
+    unsortedCards.sort((a, b) => a.id.localeCompare(b.id));
+    categories = categories.filter(c => c.id !== catId);
+    render();
+  }
+}
+
+function updateProgress() {
+  const sorted = CARDS.length - unsortedCards.length;
+  document.getElementById('sorted-count').textContent = sorted;
+  const pct = (sorted / CARDS.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  const btn = document.getElementById('btn-finish');
+  if (sorted > 0) btn.classList.add('active');
+  else btn.classList.remove('active');
+}
+
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyv2-EY6eWbqDu8Jlx2ICBGtQVo6gvoxiYBJBF5bRwc35Kl4HGJzYTP6d2wk_3FS4y8/exec';
+
+function finishSorting() {
+  document.getElementById('screen-sorting').style.display = 'none';
+  document.getElementById('screen-complete').style.display = 'flex';
+  showSummary();
+  submitToSheets();
+}
+
+function submitToSheets() {
+  const results = getResults();
+  const statusEl = document.getElementById('submit-status');
+  statusEl.textContent = '⏳ Envoi de vos réponses en cours...';
+  statusEl.style.color = '#888';
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(results)
+  })
+  .then(() => {
+    statusEl.textContent = '✅ Vos réponses ont bien été enregistrées. Merci !';
+    statusEl.style.color = '#1a7f5e';
+  })
+  .catch(() => {
+    statusEl.textContent = '⚠️ Erreur d'envoi — merci de télécharger vos résultats manuellement.';
+    statusEl.style.color = '#e2001a';
+  });
+}
+
+function getResults() {
+  return {
+    timestamp: new Date().toISOString(),
+    unsorted: unsortedCards.map(c => c.id),
+    categories: categories.map(cat => ({
+      name: cat.name || '(sans nom)',
+      isCustom: cat.isCustom,
+      cards: cat.cards.map(c => ({ id: c.id, label: c.label }))
+    })).filter(c => c.cards.length > 0)
+  };
+}
+
+function showSummary() {
+  const results = getResults();
+  const el = document.getElementById('result-summary');
+  let html = '<h4>Vos groupements</h4>';
+  results.categories.forEach(cat => {
+    html += `<div class="result-cat">
+      <div class="result-cat-name">${cat.name}${cat.isCustom ? ' ✦' : ''} (${cat.cards.length})</div>
+      <div class="result-cat-cards">${cat.cards.map(c => c.label).join(', ')}</div>
+    </div>`;
+  });
+  if (results.unsorted.length > 0) {
+    html += `<div class="result-cat"><div class="result-cat-name" style="color:#aaa">Non classées (${results.unsorted.length})</div></div>`;
+  }
+  el.innerHTML = html;
+}
+
+function exportJSON() {
+  const data = JSON.stringify(getResults(), null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'cardsorting_beobank_' + Date.now() + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Résultats téléchargés !');
+}
+
+function copyResults() {
+  const data = JSON.stringify(getResults(), null, 2);
+  navigator.clipboard.writeText(data).then(() => {
+    document.getElementById('copied-msg').style.display = 'block';
+    setTimeout(() => document.getElementById('copied-msg').style.display = 'none', 3000);
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
+CardSorting_Beobank_final-1.html
+Affichage de CardSorting_Beobank_final-1.html en cours...
